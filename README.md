@@ -17,17 +17,19 @@ This project is a full-fledged **Banking Microservices Application** built using
 * Handles user registration, login, and JWT-based authentication.
 * Contains security filters and configurations.
 * Communicates with Account and Transaction services.
+* Port : `8081`
 
 ### 3. **Account Service**
 
 * Manages user accounts.
 * Secured endpoints, integrates with User Service using Feign Client.
-* Port (default): e.g., `8081`
+* Port : e.g., `8082`
 
 ### 4. **Transaction Service**
 
 * Handles deposits, withdrawals, and transaction history.
 * Interacts with both Account and User services.
+* Port : `8083`
 
 ### 5. **Eureka Server**
 
@@ -47,6 +49,7 @@ This project is a full-fledged **Banking Microservices Application** built using
 * **Spring Cloud Netflix Eureka**
 * **Feign Clients**
 * **Maven**
+* **Postman**
 
 ---
 
@@ -144,8 +147,7 @@ eureka:
 
 ## 🔗 Useful Links
 
-* 🔗 GitHub Repository: *\[Add your repo URL]*
-* 🧾 Swagger UI (once hosted)
+* 🔗 GitHub Repository: https://github.com/kasatejaswarreddy0512/BankApp_Microservices
 * 🛡️ JWT Tools: [https://jwt.io](https://jwt.io)
 
 ---
