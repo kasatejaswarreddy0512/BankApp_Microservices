@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: gateway-service
+
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: user-service-auth
+              uri: lb://user-service
+              predicates:
+                - Path=/auth/**
+            - id: user-service-user
+              uri: lb://user-service
+              predicates:
+                - Path=/user/**
+            - id: transaction-service
+              uri: lb://transaction-service
+              predicates:
+                - Path=/api/transaction/**
+            - id: account-service
+              uri: lb://account-service
+              predicates:
+                - Path=/api/account/**
+
+server:
+  port: 9090
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8084/eureka/
