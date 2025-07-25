@@ -71,36 +71,6 @@ public class AccountController {
         return ResponseEntity.ok(accountService.getAccountByUserId(userId));
     }
 
-    @PostMapping("/deposit/{accountId}")
-    public ResponseEntity<Account> deposit(@PathVariable Long accountId,
-                                           @RequestParam Double amount,
-                                           @RequestHeader("Authorization") String authHeader) {
-        String jwt=authHeader.replace("Bearer","").trim();
-        UserDto userDto=userService.getUserProfile("Bearer "+jwt).getBody();
-        assert userDto != null;
-        return ResponseEntity.ok(accountService.deposit(accountId, amount));
-    }
-
-    @PostMapping("/withdraw/{accountId}")
-    public ResponseEntity<Account> withdraw(@PathVariable Long accountId,
-                                            @RequestParam Double amount,
-                                            @RequestHeader("Authorization") String authHeader) {
-        String jwt=authHeader.replace("Bearer","").trim();
-        UserDto userDto=userService.getUserProfile("Bearer "+jwt).getBody();
-        assert userDto != null;
-        return ResponseEntity.ok(accountService.withdraw(accountId, amount));
-    }
-
-    @PostMapping("/transfer")
-    public ResponseEntity<Account> transfer(@RequestParam Long fromAccountId,
-                                            @RequestParam Long toAccountId,
-                                            @RequestParam Double amount,
-                                            @RequestHeader("Authorization") String authHeader) {
-        String jwt=authHeader.replace("Bearer","").trim();
-        UserDto userDto=userService.getUserProfile("Bearer "+jwt).getBody();
-        assert userDto != null;
-        return ResponseEntity.ok(accountService.transfer(fromAccountId, toAccountId, amount));
-    }
 
     @GetMapping("/accountNumber/{accountNumber}")
     public ResponseEntity<Account> getAccountByAccountNumber(@PathVariable String accountNumber, @RequestHeader("Authorization") String authHeader) {
@@ -108,5 +78,15 @@ public class AccountController {
         UserDto userDto=userService.getUserProfile("Bearer "+jwt).getBody();
         assert userDto != null;
         return ResponseEntity.ok(accountService.getAccountByAccountNumber(accountNumber));
+    }
+
+    @PutMapping("/updateBalance/{accountId}")
+    public ResponseEntity<Account> updateAccountBalance(@PathVariable Long accountId,
+                                                        @RequestParam Double amount,
+                                                        @RequestHeader("Authorization") String authHeader) {
+        String jwt=authHeader.replace("Bearer","").trim();
+        UserDto userDto=userService.getUserProfile("Bearer "+jwt).getBody();
+        assert userDto != null;
+        return ResponseEntity.ok(accountService.updateAccountBalance(accountId, amount));
     }
 }

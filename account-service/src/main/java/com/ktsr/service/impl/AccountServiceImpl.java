@@ -1,6 +1,7 @@
 package com.ktsr.service.impl;
 
 import com.ktsr.enity.Account;
+import com.ktsr.feign.UserService;
 import com.ktsr.repository.AccountRepository;
 import com.ktsr.service.AccountService;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ import java.util.List;
 public class AccountServiceImpl  implements AccountService {
 
     private final AccountRepository accountRepository;
+    private final UserService userService;
 
     @Override
     public Account createAccount(Long userId, Account account, String requestRole) {
@@ -74,49 +76,22 @@ public class AccountServiceImpl  implements AccountService {
 
 
     @Override
-    public Account deposit(Long accountId, Double amount) {
-        Account account = getAccountById(accountId);
-        if (amount <= 0) {
-            throw new IllegalArgumentException("Deposit amount must be greater than zero");
-        }
-        account.setBalance(account.getBalance() + amount);
-        return accountRepository.save(account);
-    }
-
-    @Override
-    public Account withdraw(Long accountId, Double amount) {
-        Account account = getAccountById(accountId);
-        if (amount <= 0) {
-            throw new IllegalArgumentException("Withdrawal amount must be greater than zero");
-        }
-        if (account.getBalance() < amount) {
-            throw new IllegalArgumentException("Insufficient balance for withdrawal");
-        }
-        account.setBalance(account.getBalance() - amount);
-        return accountRepository.save(account);
-    }
-
-    @Override
-    public Account transfer(Long fromAccountId, Long toAccountId, Double amount) {
-    Account fromAccount = getAccountById(fromAccountId);
-    Account toAccount = getAccountById(toAccountId);
-    if (amount <= 0) {
-        throw new IllegalArgumentException("Transfer amount must be greater than zero");
-    }
-    if (fromAccount.getBalance() < amount) {
-        throw new IllegalArgumentException("Insufficient balance for transfer");
-    }
-    fromAccount.setBalance(fromAccount.getBalance() - amount);
-    toAccount.setBalance(toAccount.getBalance() + amount);
-    accountRepository.save(fromAccount);
-    accountRepository.save(toAccount);
-    return fromAccount;
-    }
-
-
-    @Override
     public Account getAccountByAccountNumber(String accountNumber) {
         return accountRepository.findByAccountNumber(accountNumber)
                 .orElseThrow(() -> new RuntimeException("Account not found with account number: " + accountNumber));
     }
+
+    @Override
+    public Account updateAccountBalance(Long accountId, Double amount) {
+        Account account = getAccountById(accountId); // Should throw if not found
+
+        double newBalance = account.getBalance() + amount;
+        if (newBalance < 0) {
+            throw new IllegalArgumentException("Insufficient balance for this operation");
+        }
+
+        account.setBalance(newBalance);
+        return accountRepository.save(account);
+    }
+
 }
