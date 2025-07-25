@@ -1,1 +1,14 @@
-spring.application.name=eureka-service
+spring:
+  application:
+    name: eureka-service
+server:
+    port: 8084
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    service-url:
+      defaultZone: http://localhost:8084/eureka/
